@@ -1,15 +1,15 @@
 // src/events/sdkEvents.ts
 
-import { EventEmitter } from 'events';
+import { NativeEventEmitter } from "react-native";
 
-export type SDKEventType = 
-  | 'onboarding:started'
-  | 'onboarding:submitting'
-  | 'onboarding:success'
-  | 'onboarding:error'
-  | 'token:missing'
-  | 'token:refreshed'
-  | 'token:cleared';  // ✅ Added this
+export type SDKEventType =
+  | "onboarding:started"
+  | "onboarding:submitting"
+  | "onboarding:success"
+  | "onboarding:error"
+  | "token:missing"
+  | "token:refreshed"
+  | "token:cleared";
 
 export interface SDKEventData {
   type: SDKEventType;
@@ -17,11 +17,12 @@ export interface SDKEventData {
   data?: any;
 }
 
-class SDKEvents extends EventEmitter {
+class SDKEvents {
   private static instance: SDKEvents;
+  private emitter: NativeEventEmitter;
 
   private constructor() {
-    super();
+    this.emitter = new NativeEventEmitter();
   }
 
   static getInstance(): SDKEvents {
@@ -35,13 +36,22 @@ class SDKEvents extends EventEmitter {
     const eventData: SDKEventData = {
       type,
       timestamp: Date.now(),
-      data
+      data,
     };
-    this.emit(type, eventData);
-    
+
+    this.emitter.emit(type, eventData);
+
     if (__DEV__) {
-      console.log(`[AirXPay Event] ${type}`, data ? '(with data)' : '');
+      console.log(`[ZeptPay Event] ${type}`, data ? "(with data)" : "");
     }
+  }
+
+  addListener(type: SDKEventType, callback: (data: SDKEventData) => void) {
+    return this.emitter.addListener(type, callback);
+  }
+
+  removeAllListeners(type: SDKEventType) {
+    this.emitter.removeAllListeners(type);
   }
 }
 

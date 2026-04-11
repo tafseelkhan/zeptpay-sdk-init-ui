@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { useAirXPaySafe } from '../contexts/AirXPayProvider';
+import { useZeptPaySafe } from '../contexts/ZeptPayProvider';
 import { tokenService } from '../utils/token/tokenService';
 import { sdkEvents } from '../events/sdkEvents';
 import { ErrorHandler, AppError } from '../error/errorHandler';
 
-interface UseAirXPayReturn {
+interface UseZeptPayReturn {
   loading: boolean;
   error: AppError | null;
   hasToken: boolean;
@@ -14,10 +14,10 @@ interface UseAirXPayReturn {
   clearError: () => void;
 }
 
-export const useAirXPay = (): UseAirXPayReturn => {
+export const useZeptPay = (): UseZeptPayReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AppError | null>(null);
-  const context = useAirXPaySafe();
+  const context = useZeptPaySafe();
 
   const submitToBackend = useCallback(async (
     data: any,
@@ -60,7 +60,7 @@ export const useAirXPay = (): UseAirXPayReturn => {
       sdkEvents.emitEvent('token:cleared');
       
       if (__DEV__) {
-        console.log('[useAirXPay] User logged out successfully');
+        console.log('[useZeptPay] User logged out successfully');
       }
     } catch (err) {
       // Silent fail

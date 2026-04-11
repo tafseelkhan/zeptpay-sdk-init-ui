@@ -15,7 +15,7 @@ import {
   IconButton,
   Avatar,
 } from "react-native-paper";
-import { LinearGradient } from "expo-linear-gradient";
+import LinearGradient from "react-native-linear-gradient";
 import { UI_TEXTS } from "../../etc/constants";
 
 // ==================== TYPE DEFINITIONS ====================
@@ -211,11 +211,11 @@ const getInitials = (name: any): string => {
 
 // ==================== BRANDING CONSTANTS ====================
 
-const AIRXPAY_BRANDING = {
-  logo: require("../../assets/images/airxpay.png"),
-  name: "AirXPay",
+const ZeptPay_BRANDING = {
+  logo: require("../../assets/images/zeptpay.png"),
+  name: "ZeptPay",
   tagline: "Secure Digital Wallet",
-  copyright: "© 2024 AirXPay. All rights reserved.",
+  copyright: "© 2024 ZeptPay. All rights reserved.",
 } as const;
 
 // ==================== MAIN COMPONENT ====================
@@ -239,15 +239,15 @@ export const OnboardingCompleteScreen: React.FC<
     tickColor: theme.tickColor || "#00ffaa",
   };
 
-  const AirXPayBranding = () => (
+  const ZeptPayBranding = () => (
     <View style={styles.brandingContainer}>
       <Image
-        source={AIRXPAY_BRANDING.logo}
+        source={ZeptPay_BRANDING.logo}
         style={styles.brandingLogo}
         resizeMode="contain"
       />
-      <Text style={styles.brandingName}>{AIRXPAY_BRANDING.name}</Text>
-      <Text style={styles.brandingTagline}>{AIRXPAY_BRANDING.tagline}</Text>
+      <Text style={styles.brandingName}>{ZeptPay_BRANDING.name}</Text>
+      <Text style={styles.brandingTagline}>{ZeptPay_BRANDING.tagline}</Text>
     </View>
   );
 
@@ -405,10 +405,13 @@ export const OnboardingCompleteScreen: React.FC<
         iconPosition === "left" ? ("row" as const) : ("row-reverse" as const),
       alignItems: "center" as const,
       justifyContent: "center" as const,
-      gap: button.gap || 8, // Customizable gap between icon and text
+      gap: button.gap || 8,
       paddingHorizontal: button.contentPaddingHorizontal,
       paddingVertical: button.contentPaddingVertical,
     };
+
+    // ✅ Check if background contains gradient
+    const isGradient = backgroundColor?.includes("gradient") || false;
 
     // ✅ Button content with icon handling
     const renderContent = () => {
@@ -429,19 +432,19 @@ export const OnboardingCompleteScreen: React.FC<
       return <Text style={[textStyles, button.textStyle]}>{label}</Text>;
     };
 
-    return (
-      <TouchableOpacity
-        key={index}
-        style={[buttonStyles, button.style]}
-        onPress={onPress}
-        activeOpacity={button.activeOpacity || 0.8}
-        disabled={button.disabled}
-        hitSlop={button.hitSlop}
-        delayPressIn={button.delayPressIn}
-        delayPressOut={button.delayPressOut}
-        delayLongPress={button.delayLongPress}
-      >
-        {backgroundColor?.includes("gradient") ? (
+    if (isGradient) {
+      return (
+        <TouchableOpacity
+          key={index}
+          style={[buttonStyles, button.style]}
+          onPress={onPress}
+          activeOpacity={button.activeOpacity || 0.8}
+          disabled={button.disabled}
+          hitSlop={button.hitSlop}
+          delayPressIn={button.delayPressIn}
+          delayPressOut={button.delayPressOut}
+          delayLongPress={button.delayLongPress}
+        >
           <LinearGradient
             colors={[backgroundColor, customTheme.secondaryColor]}
             start={button.gradientStart || { x: 0, y: 0 }}
@@ -457,9 +460,23 @@ export const OnboardingCompleteScreen: React.FC<
           >
             {renderContent()}
           </LinearGradient>
-        ) : (
-          renderContent()
-        )}
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        key={index}
+        style={[buttonStyles, button.style]}
+        onPress={onPress}
+        activeOpacity={button.activeOpacity || 0.8}
+        disabled={button.disabled}
+        hitSlop={button.hitSlop}
+        delayPressIn={button.delayPressIn}
+        delayPressOut={button.delayPressOut}
+        delayLongPress={button.delayLongPress}
+      >
+        {renderContent()}
       </TouchableOpacity>
     );
   };
@@ -478,7 +495,7 @@ export const OnboardingCompleteScreen: React.FC<
           style={styles.gradient}
         >
           <View style={styles.loadingContainer}>
-            <AirXPayBranding />
+            <ZeptPayBranding />
 
             <View style={styles.iconContainer}>
               <LinearGradient
@@ -521,7 +538,7 @@ export const OnboardingCompleteScreen: React.FC<
           style={styles.gradient}
         >
           <View style={styles.emptyContainer}>
-            <AirXPayBranding />
+            <ZeptPayBranding />
 
             <View
               style={[
@@ -575,7 +592,7 @@ export const OnboardingCompleteScreen: React.FC<
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <AirXPayBranding />
+          <ZeptPayBranding />
 
           {/* Success Header with Profile Image/Avatar */}
           <View style={styles.headerContainer}>
@@ -1026,7 +1043,7 @@ export const OnboardingCompleteScreen: React.FC<
                 { color: customTheme.textColor + "40", marginTop: 4 },
               ]}
             >
-              {AIRXPAY_BRANDING.copyright}
+              {ZeptPay_BRANDING.copyright}
             </Text>
           </View>
         </ScrollView>
@@ -1128,6 +1145,10 @@ const styles = StyleSheet.create({
     padding: 16,
     elevation: 2,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   statusCardLabel: {
     fontSize: 12,
@@ -1156,6 +1177,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     elevation: 3,
     overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   walletCard: {
     width: "100%",
@@ -1163,6 +1188,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     elevation: 3,
     overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   cardHeader: {
     flexDirection: "row",

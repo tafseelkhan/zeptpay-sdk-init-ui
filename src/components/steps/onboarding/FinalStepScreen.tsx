@@ -13,12 +13,11 @@ import {
   Surface,
   IconButton,
 } from "react-native-paper";
-import { LinearGradient } from "expo-linear-gradient";
-import { useAirXPay } from "../../../hooks/useAirXPay";
+import LinearGradient from "react-native-linear-gradient";
+import { useZeptPay } from "../../../hooks/useZeptPay";
 import { useMerchantOnboarding } from "../../../hooks/useMerchantOnboarding";
 import { CreateMerchantPayload } from "../../../types/merchantTypes";
 import { UI_TEXTS } from "../../../etc/constants";
-// REMOVED: tokenService import - not needed for validation
 
 interface FinalStepScreenProps {
   publicKey: string;
@@ -37,11 +36,11 @@ export const FinalStepScreen: React.FC<FinalStepScreenProps> = ({
 }) => {
   // Use both hooks
   const {
-    loading: airXPayLoading,
-    error: airXPayError,
+    loading: zeptpayLoading,
+    error: zeptpayError,
     submitToBackend,
-    clearError: clearAirXPayError,
-  } = useAirXPay();
+    clearError: clearZeptPayError,
+  } = useZeptPay();
   const {
     loading: merchantLoading,
     error: merchantError,
@@ -68,16 +67,14 @@ export const FinalStepScreen: React.FC<FinalStepScreenProps> = ({
 
   // Handle errors from both hooks
   useEffect(() => {
-    if (airXPayError) {
-      // REMOVED: Alert - just call onError
-      onError?.(airXPayError);
-      clearAirXPayError();
+    if (zeptpayError) {
+      onError?.(zeptpayError);
+      clearZeptPayError();
     }
-  }, [airXPayError, onError, clearAirXPayError]);
+  }, [zeptpayError, onError, clearZeptPayError]);
 
   useEffect(() => {
     if (merchantError) {
-      // REMOVED: Alert - just call onError
       onError?.(merchantError);
       clearMerchantError();
     }
@@ -86,8 +83,6 @@ export const FinalStepScreen: React.FC<FinalStepScreenProps> = ({
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
-
-      // REMOVED: Token check - SDK must NOT block flow if token is missing
 
       let backendResult = null;
 
@@ -102,13 +97,13 @@ export const FinalStepScreen: React.FC<FinalStepScreenProps> = ({
         console.log("✅ Backend API response received:", backendResult);
       }
 
-      // 🚀 STEP 2: Create merchant in AirXPay
+      // 🚀 STEP 2: Create merchant in ZeptPay
       setStep("merchant");
-      console.log("🚀 Creating merchant in AirXPay...");
+      console.log("🚀 Creating merchant in ZeptPay...");
 
       const merchantResponse = await createMerchant(formData);
 
-      console.log("✅ Merchant created in AirXPay:", merchantResponse);
+      console.log("✅ Merchant created in ZeptPay:", merchantResponse);
 
       // 🎉 STEP 3: Success callback with both responses
       onSuccess({
@@ -140,7 +135,7 @@ export const FinalStepScreen: React.FC<FinalStepScreenProps> = ({
     return allFilled;
   };
 
-  const isLoading = isSubmitting || airXPayLoading || merchantLoading;
+  const isLoading = isSubmitting || zeptpayLoading || merchantLoading;
 
   return (
     <KeyboardAvoidingView
@@ -323,7 +318,6 @@ export const FinalStepScreen: React.FC<FinalStepScreenProps> = ({
   );
 };
 
-// Styles remain unchanged
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -344,6 +338,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 16,
     elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   headerIcon: {
     marginRight: 12,
@@ -373,6 +371,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   progressContainer: {
     flexDirection: "row",
@@ -502,3 +504,5 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 });
+
+export default FinalStepScreen;

@@ -22,21 +22,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### ✨ New Features
 
 ##### 🔐 Provider & Context System
-- **`AirXPayProvider`** - React Context provider for SDK configuration
+- **`ZeptPayProvider`** - React Context provider for SDK configuration
   - Initializes SDK with public key
   - Verifies public key automatically
   - Provides loading and error states
   - Logging control with `enableLogging` prop
 
 ```tsx
-<AirXPayProvider publicKey="your_public_key" enableLogging={true}>
+<ZeptPayProvider publicKey="your_public_key" enableLogging={true}>
   <MerchantOnboarding {...props} />
-</AirXPayProvider>
+</ZeptPayProvider>
 ```
 
-- **`useAirXPay` & `useAirXPaySafe`** - Hooks to access SDK context
-  - `useAirXPay()` - Throws error if used outside provider
-  - `useAirXPaySafe()` - Returns null if used outside provider
+- **`useZeptPay` & `useZeptPaySafe`** - Hooks to access SDK context
+  - `useZeptPay()` - Throws error if used outside provider
+  - `useZeptPaySafe()` - Returns null if used outside provider
 
 ##### 📁 File Upload System (Modern Expo API)
 - **`fileBrowser.ts`** - Complete file handling solution
@@ -115,7 +115,7 @@ const base64 = await convertFileToBase64({
 - Review all merchant data
 - Two-step submission:
   1. Developer's backend API (optional)
-  2. AirXPay merchant creation
+  2. ZeptPay merchant creation
 - Progress indicators for each step
 - Token management
 - Success response handling
@@ -131,7 +131,7 @@ const base64 = await convertFileToBase64({
 
 ##### 🔧 Hooks System
 
-###### useAirXPay
+###### useZeptPay
 - `submitToBackend()` - Call developer's API
 - `logout()` - Clear token and reset state
 - `clearError()` - Reset error state
@@ -212,7 +212,7 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 
 ##### 📁 Project Structure
 ```
-@flixora/airxpay-react-native/
+@flixora/zeptpay-react-native/
 ├── api/
 │   └── clients/
 │       └── verifyPublicKey.ts      # Hidden API calls
@@ -230,7 +230,7 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 │           ├── FinalStepScreen.tsx    # Step 4
 │           └── OnboardingComplete.tsx # Step 5
 ├── contexts/
-│   └── AirXPayProvider.tsx          # React context
+│   └── ZeptPayProvider.tsx          # React context
 ├── error/
 │   └── errorHandler.ts               # Error handling
 ├── etc/
@@ -238,7 +238,7 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 ├── events/
 │   └── sdkEvents.ts                   # Event system
 ├── hooks/
-│   ├── useAirXPay.ts                   # Provider hook
+│   ├── useZeptPay.ts                   # Provider hook
 │   └── useMerchantOnboarding.ts        # Merchant hook
 ├── types/
 │   └── merchantTypes.ts                 # TypeScript types
@@ -283,7 +283,7 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 ## [0.0.2] - 2026-02-10
 
 ### ✨ Features Added
-- **AirXPayProvider** - Context setup
+- **ZeptPayProvider** - Context setup
 - **Token Service** - Secure storage implementation
 - **Event System** - Basic event emitter
 
@@ -317,7 +317,7 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 | 0.0.5 | 2026-03-03 | ✅ Complete onboarding flow, FileUploader, All form steps, Hooks, Error handling |
 | 0.0.4 | 2026-02-20 | ✅ FileUploader component, MIME type fixes |
 | 0.0.3 | 2026-02-15 | ✅ BasicDetailsForm, Validation improvements |
-| 0.0.2 | 2026-02-10 | ✅ AirXPayProvider, Token service, Events |
+| 0.0.2 | 2026-02-10 | ✅ ZeptPayProvider, Token service, Events |
 | 0.0.1 | 2026-02-01 | 🎉 Initial release |
 
 ---
@@ -341,15 +341,15 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 - No breaking changes
 
 ### v0.0.1 → v0.0.2
-- **Provider Required**: SDK must be wrapped in `AirXPayProvider`
+- **Provider Required**: SDK must be wrapped in `ZeptPayProvider`
   ```tsx
   // Old (v0.0.1)
   <MerchantOnboarding {...props} />
   
   // New (v0.0.2)
-  <AirXPayProvider publicKey="key">
+  <ZeptPayProvider publicKey="key">
     <MerchantOnboarding {...props} />
-  </AirXPayProvider>
+  </ZeptPayProvider>
   ```
 
 ---
@@ -374,16 +374,16 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 
 2. **Wrap with Provider** (if not already):
    ```tsx
-   <AirXPayProvider publicKey="your_key">
+   <ZeptPayProvider publicKey="your_key">
      <MerchantOnboarding />
-   </AirXPayProvider>
+   </ZeptPayProvider>
    ```
 
 3. **Update imports**:
    ```tsx
    // New modular imports
-   import { useAirXPay } from '@flixora/airxpay-react-native/hooks';
-   import { tokenService } from '@flixora/airxpay-react-native/utils';
+   import { useZeptPay } from '@flixora/zeptpay-react-native/hooks';
+   import { tokenService } from '@flixora/zeptpay-react-native/utils';
    ```
 
 ---
@@ -410,7 +410,7 @@ const BACKEND_URL = 'http://172.20.10.12:7000';
 ### Need Help?
 - 📧 Email: support@flixora.com
 - 📚 Docs: [docs.flixora.com/react-native](https://docs.flixora.com/react-native)
-- 🐛 Issues: [GitHub Issues](https://github.com/tafseelkhan/airxpay-sdk-init-ui/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/tafseelkhan/zeptpay-sdk-init-ui/issues)
 - 💬 Discord: [Flixora Community](https://discord.gg/flixora)
 
 ### Report Issues

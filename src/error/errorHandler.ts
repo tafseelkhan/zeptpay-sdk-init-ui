@@ -7,7 +7,7 @@ export interface AppError {
 
 export class ErrorHandler {
   static handle(error: unknown): AppError {
-    console.error('[AirXPay Error]', error);
+    console.error('[ZeptPay Error]', error);
 
     // Network errors
     if (error instanceof Error && error.message.includes('Network')) {

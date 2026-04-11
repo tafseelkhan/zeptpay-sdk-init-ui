@@ -3,7 +3,7 @@ import { verifyPublicKey } from '../api/clients/verifyPublicKey';
 import { tokenService } from '../utils/token/tokenService';
 import { Logger } from '../utils/log/logger';
 
-interface AirXPayContextType {
+interface ZeptPayContextType {
   publicKey: string;
   isValid: boolean;
   loading: boolean;
@@ -13,7 +13,7 @@ interface AirXPayContextType {
   mode: 'test' | 'live';
 }
 
-const AirXPayContext = createContext<AirXPayContextType | null>(null);
+const ZeptPayContext = createContext<ZeptPayContextType | null>(null);
 
 interface Props {
   publicKey: string;
@@ -21,14 +21,14 @@ interface Props {
   enableLogging?: boolean;
 }
 
-const logger = new Logger({ prefix: '[AirXPay Provider]' });
+const logger = new Logger({ prefix: '[ZeptPay Provider]' });
 
-export const AirXPayProvider: React.FC<Props> = ({ 
+export const ZeptPayProvider: React.FC<Props> = ({ 
   publicKey, 
   children,
   enableLogging = __DEV__ 
 }) => {
-  const [state, setState] = useState<AirXPayContextType>({
+  const [state, setState] = useState<ZeptPayContextType>({
     publicKey,
     isValid: false,
     loading: true,
@@ -51,7 +51,7 @@ export const AirXPayProvider: React.FC<Props> = ({
       }
 
       try {
-        logger.info('Initializing AirXPay...');
+        logger.info('Initializing ZeptPay...');
         
         // Verify public key
         const verification = await verifyPublicKey(publicKey);
@@ -84,7 +84,7 @@ export const AirXPayProvider: React.FC<Props> = ({
           mode: verification.merchantData?.mode || 'test'
         });
 
-        logger.info('AirXPay initialized successfully');
+        logger.info('ZeptPay initialized successfully');
       } catch (error) {
         logger.error('Initialization failed:', error);
         setState({
@@ -102,23 +102,23 @@ export const AirXPayProvider: React.FC<Props> = ({
   }, [publicKey, enableLogging]);
 
   return (
-    <AirXPayContext.Provider value={state}>
+    <ZeptPayContext.Provider value={state}>
       {children}
-    </AirXPayContext.Provider>
+    </ZeptPayContext.Provider>
   );
 };
 
-export const useAirXPay = (): AirXPayContextType => {
-  const context = useContext(AirXPayContext);
+export const useZeptPay = (): ZeptPayContextType => {
+  const context = useContext(ZeptPayContext);
   if (!context) {
-    throw new Error('useAirXPay must be used within AirXPayProvider');
+    throw new Error('useZeptPay must be used within ZeptPayProvider');
   }
   return context;
 };
 
-export const useAirXPaySafe = (): AirXPayContextType | null => {
+export const useZeptPaySafe = (): ZeptPayContextType | null => {
   try {
-    return useAirXPay();
+    return useZeptPay();
   } catch {
     return null;
   }

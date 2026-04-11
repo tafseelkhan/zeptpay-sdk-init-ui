@@ -11,13 +11,13 @@ import {
   Platform,
 } from "react-native";
 import {
-  TextInput,
+  TextInput as PaperTextInput,
   HelperText,
   Surface,
   IconButton,
   ActivityIndicator,
 } from "react-native-paper";
-import { LinearGradient } from "expo-linear-gradient";
+import LinearGradient from "react-native-linear-gradient";
 import FileUploader from "../common/FileUploader";
 import {
   Merchant,
@@ -248,17 +248,16 @@ const KYCVerification: React.FC<KYCVerificationProps> = ({
     });
   };
 
-  // ✅ FIXED: Handle document upload - receives base64 string directly
+  // Handle document upload - receives base64 string directly
   const handleDocumentUpload = async (
     documentKey: keyof Pick<
       KYCDetails,
       "panCardUrl" | "aadhaarUrl" | "addressProofUrl" | "selfieUrl"
     >,
-    base64String: string, // ✅ Now receives base64 string, not file object
+    base64String: string,
   ) => {
     setUploadingFor(documentKey as string);
 
-    // ✅ Directly store the base64 string - it's already validated!
     setKycDetails((prev) => ({
       ...prev,
       [documentKey]: base64String,
@@ -551,7 +550,7 @@ const KYCVerification: React.FC<KYCVerificationProps> = ({
                         <Text style={styles.requiredStar}>*</Text>
                       )}
                     </Text>
-                    <TextInput
+                    <PaperTextInput
                       mode="outlined"
                       value={kycDetails[field.key] || ""}
                       onChangeText={(text) => handleTextChange(field.key, text)}
@@ -562,7 +561,10 @@ const KYCVerification: React.FC<KYCVerificationProps> = ({
                       outlineColor="#E5E7EB"
                       activeOutlineColor="#0066CC"
                       left={
-                        <TextInput.Icon icon={field.icon} color="#6B7280" />
+                        <PaperTextInput.Icon
+                          icon={field.icon}
+                          color="#6B7280"
+                        />
                       }
                       placeholder={field.placeholder}
                       placeholderTextColor="#9CA3AF"

@@ -6,7 +6,7 @@ export const storage = {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
-      console.error('[AirXPay] Storage set failed:', error);
+      console.error('[ZeptPay] Storage set failed:', error);
     }
   },
 
@@ -15,7 +15,7 @@ export const storage = {
       const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue ? JSON.parse(jsonValue) : null;
     } catch (error) {
-      console.error('[AirXPay] Storage get failed:', error);
+      console.error('[ZeptPay] Storage get failed:', error);
       return null;
     }
   },
@@ -24,7 +24,7 @@ export const storage = {
     try {
       await AsyncStorage.removeItem(key);
     } catch (error) {
-      console.error('[AirXPay] Storage remove failed:', error);
+      console.error('[ZeptPay] Storage remove failed:', error);
     }
   },
 
@@ -32,7 +32,7 @@ export const storage = {
     try {
       await AsyncStorage.clear();
     } catch (error) {
-      console.error('[AirXPay] Storage clear failed:', error);
+      console.error('[ZeptPay] Storage clear failed:', error);
     }
   }
 };

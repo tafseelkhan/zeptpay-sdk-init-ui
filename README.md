@@ -1,23 +1,23 @@
-# 📱 Complete Integration Guide - @flixora/airxpay-react-native
+# 📱 Complete Integration Guide - @flixora/zeptpay-react-native
 
 ## 🎯 Understanding the Complete Implementation
 
 Below is a **production-ready** implementation showing exactly how to integrate the SDK. I'll explain **EACH PART** in detail so developers understand WHY and HOW to use it.
 
-# @flixora/airxpay-react-native 🚀
+# @flixora/zeptpay-react-native 🚀
 
-![npm version](https://img.shields.io/npm/v/@flixora/airxpay-react-native)
-![license](https://img.shields.io/npm/l/@flixora/airxpay-react-native)
-![downloads](https://img.shields.io/npm/dm/@flixora/airxpay-react-native)
+![npm version](https://img.shields.io/npm/v/@flixora/zeptpay-react-native)
+![license](https://img.shields.io/npm/l/@flixora/zeptpay-react-native)
+![downloads](https://img.shields.io/npm/dm/@flixora/zeptpay-react-native)
 
-**Complete React Native SDK for AirXPay** - Merchant onboarding with KYC verification, bank details, and document uploads. Built with Expo and TypeScript.
+**Complete React Native SDK for ZeptPay** - Merchant onboarding with KYC verification, bank details, and document uploads. Built with Expo and TypeScript.
 
 ## 📦 Installation
 
 ```bash
-npm install @flixora/airxpay-sdk-init-ui
+npm install @flixora/zeptpay-sdk-init-ui
 # or
-yarn add @flixora/airxpay-sdk-init-ui
+yarn add @flixora/zeptpay-sdk-init-ui
 ```
 
 ### Peer Dependencies
@@ -44,11 +44,11 @@ import { View, ActivityIndicator, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
   MerchantOnboarding,
-  useAirXPaySafe,
+  useZeptPaySafe,
   tokenService,
   OnboardingCompleteScreen,
   useMerchantOnboarding,
-} from "@flixora/airxpay-react-native";
+} from "@flixora/zeptpay-react-native";
 ```
 
 ### 🔍 **Imports Explained:**
@@ -56,7 +56,7 @@ import {
 | Import | Purpose |
 |--------|---------|
 | `MerchantOnboarding` | Main 5-step onboarding component |
-| `useAirXPaySafe` | Hook to access SDK context (safe version - returns null if not in provider) |
+| `useZeptPaySafe` | Hook to access SDK context (safe version - returns null if not in provider) |
 | `tokenService` | Utility to save/retrieve JWT tokens securely |
 | `OnboardingCompleteScreen` | Success screen after onboarding |
 | `useMerchantOnboarding` | Hook for merchant operations (create, fetch status) |
@@ -67,7 +67,7 @@ import {
 
 ```typescript
 export default function MerchantOnboardingScreen() {
-  const airxpay = useAirXPaySafe();
+  const zeptpay = useZeptPaySafe();
   const navigation = useNavigation();
   const { createMerchant, loading: merchantLoading } = useMerchantOnboarding();
 ```
@@ -222,17 +222,17 @@ export default function MerchantOnboardingScreen() {
 ```typescript
   useEffect(() => {
     console.log(
-      "🔄 useEffect triggered, airxpay:",
-      airxpay ? "exists" : "null",
+      "🔄 useEffect triggered, zeptpay:",
+      zeptpay ? "exists" : "null",
     );
 
-    if (airxpay) {
+    if (zeptpay) {
       const checkReady = async () => {
         console.log("🔍 Checking SDK readiness...");
         
         // ⏱️ Wait for SDK to finish loading
         let tries = 0;
-        while (airxpay.loading && tries < 20) {
+        while (zeptpay.loading && tries < 20) {
           console.log(`⏳ Waiting for SDK to load... attempt ${tries + 1}/20`);
           await new Promise((res) => setTimeout(res, 100));
           tries++;
@@ -260,7 +260,7 @@ export default function MerchantOnboardingScreen() {
       };
       checkReady();
     }
-  }, [airxpay]); // Runs when airxpay context changes
+  }, [zeptpay]); // Runs when zeptpay context changes
 ```
 
 ### 🔄 **Why This Pattern?**
@@ -326,8 +326,8 @@ export default function MerchantOnboardingScreen() {
 
 ```typescript
   if (
-    !airxpay ||
-    airxpay.loading ||
+    !zeptpay ||
+    zeptpay.loading ||
     !isReady ||
     isSubmitting ||
     merchantLoading ||
@@ -353,8 +353,8 @@ export default function MerchantOnboardingScreen() {
 ### 3️⃣ **Invalid Configuration**
 
 ```typescript
-  if (!airxpay.isValid) {
-    console.log("❌ AirXPay configuration invalid");
+  if (!zeptpay.isValid) {
+    console.log("❌ ZeptPay configuration invalid");
     return (
       <View
         style={{
@@ -365,10 +365,10 @@ export default function MerchantOnboardingScreen() {
         }}
       >
         <Text style={{ color: "red", fontSize: 16, textAlign: "center" }}>
-          ❌ Invalid AirXPay configuration
+          ❌ Invalid ZeptPay configuration
         </Text>
         <Text style={{ marginTop: 10, color: "#666", textAlign: "center" }}>
-          Error: {airxpay.error || "Public key verification failed"}
+          Error: {zeptpay.error || "Public key verification failed"}
         </Text>
       </View>
     );
@@ -479,7 +479,7 @@ export default function MerchantOnboardingScreen() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             seller: finalData,
-            publicKey: airxpay.publicKey,
+            publicKey: zeptpay.publicKey,
           }),
         },
       );
@@ -547,7 +547,7 @@ export default function MerchantOnboardingScreen() {
   console.log("🔄 Rendering MerchantOnboarding form");
   return (
     <MerchantOnboarding
-      mode={(airxpay.mode as "test" | "live") || "test"}
+      mode={(zeptpay.mode as "test" | "live") || "test"}
       isKycCompleted={false}
       isBankDetailsCompleted={false}
       kycStatus="not_submitted"
@@ -612,12 +612,12 @@ export default function MerchantOnboardingScreen() {
 
 1. **Always wrap with Provider**
    ```tsx
-   <AirXPayProvider publicKey="your_key">
+   <ZeptPayProvider publicKey="your_key">
      <MerchantOnboardingScreen />
-   </AirXPayProvider>
+   </ZeptPayProvider>
    ```
 
-2. **Use `useAirXPaySafe()`** - It returns null if provider missing
+2. **Use `useZeptPaySafe()`** - It returns null if provider missing
 3. **Check token on mount** - Resume sessions automatically
 4. **Verify token validity** - Don't assume stored token works
 5. **Accumulate form data** - Use state to combine all steps
@@ -625,7 +625,7 @@ export default function MerchantOnboardingScreen() {
 
 ### ❌ **DON'T:**
 
-1. **Don't use `useAirXPay()` without provider** - It throws error
+1. **Don't use `useZeptPay()` without provider** - It throws error
 2. **Don't ignore token expiration** - Always verify
 3. **Don't store sensitive data** - Use `tokenService`
 4. **Don't modify SDK internals** - Use provided props
@@ -711,15 +711,15 @@ This implementation demonstrates:
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { 
-  AirXPayProvider,
+  ZeptPayProvider,
   MerchantOnboarding,
-  useAirXPaySafe,
+  useZeptPaySafe,
   tokenService,
   OnboardingCompleteScreen
-} from "@flixora/airxpay-react-native";
+} from "@flixora/zeptpay-react-native";
 
 function OnboardingFlow() {
-  const airxpay = useAirXPaySafe();
+  const zeptpay = useZeptPaySafe();
   const [hasToken, setHasToken] = useState(false);
   const [merchantData, setMerchantData] = useState(null);
 
@@ -741,7 +741,7 @@ function OnboardingFlow() {
     init();
   }, []);
 
-  if (!airxpay?.isValid) return <ActivityIndicator />;
+  if (!zeptpay?.isValid) return <ActivityIndicator />;
 
   if (hasToken && merchantData) {
     return (
@@ -775,9 +775,9 @@ function OnboardingFlow() {
 
 export default function App() {
   return (
-    <AirXPayProvider publicKey="your_key">
+    <ZeptPayProvider publicKey="your_key">
       <OnboardingFlow />
-    </AirXPayProvider>
+    </ZeptPayProvider>
   );
 }
 ```
@@ -800,7 +800,7 @@ export default function App() {
 Configurable logging utility.
 
 ```tsx
-import { Logger } from '@flixora/airxpay-react-native';
+import { Logger } from '@flixora/zeptpay-react-native';
 
 const logger = new Logger({ 
   enabled: true, 
@@ -816,7 +816,7 @@ logger.debug('Debug info');
 ## 📁 File Structure
 
 ```
-@flixora/airxpay-react-native/
+@flixora/zeptpay-react-native/
 ├── api/
 │   └── clients/
 │       └── verifyPublicKey.ts      # 🔒 Hidden API (URL never exposed)
@@ -834,7 +834,7 @@ logger.debug('Debug info');
 │           ├── FinalStepScreen.tsx    # ✅ Step 4: Review & Submit
 │           └── OnboardingComplete.tsx # 🎉 Step 5: Success
 ├── contexts/
-│   └── AirXPayProvider.tsx          # ⚛️ React Context Provider
+│   └── ZeptPayProvider.tsx          # ⚛️ React Context Provider
 ├── error/
 │   └── errorHandler.ts               # 🛡️ Centralized error handling
 ├── etc/
@@ -842,7 +842,7 @@ logger.debug('Debug info');
 ├── events/
 │   └── sdkEvents.ts                   # 📡 Event emitter
 ├── hooks/
-│   ├── useAirXPay.ts                   # 🎣 SDK context hook
+│   ├── useZeptPay.ts                   # 🎣 SDK context hook
 │   └── useMerchantOnboarding.ts        # 🎣 Merchant management hook
 ├── types/
 │   └── merchantTypes.ts                 # 📘 TypeScript definitions
@@ -878,13 +878,13 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { 
   MerchantOnboarding, 
-  useAirXPay,
+  useZeptPay,
   type Merchant 
-} from '@flixora/airxpay-react-native';
+} from '@flixora/zeptpay-react-native';
 
 export const MerchantScreen = () => {
   const [loading, setLoading] = useState(false);
-  const { publicKey } = useAirXPay();
+  const { publicKey } = useZeptPay();
 
   const handleSubmitToBackend = async (data: any) => {
     // Optional: Call your backend API first
@@ -932,7 +932,7 @@ export const MerchantScreen = () => {
 | **0.0.5** | 2026-03-03 | 🎉 Complete onboarding flow, FileUploader, All form steps, Hooks, Error handling |
 | 0.0.4 | 2026-02-20 | ✅ FileUploader component, MIME type fixes |
 | 0.0.3 | 2026-02-15 | ✅ BasicDetailsForm, Validation improvements |
-| 0.0.2 | 2026-02-10 | ✅ AirXPayProvider, Token service, Events |
+| 0.0.2 | 2026-02-10 | ✅ ZeptPayProvider, Token service, Events |
 | 0.0.1 | 2026-02-01 | 🎉 Initial release |
 
 ## 🎯 Features by Version
@@ -945,7 +945,7 @@ export const MerchantScreen = () => {
 - Final review and submission
 - Success screen with wallet details
 - React Context provider
-- Custom hooks (useAirXPay, useMerchantOnboarding)
+- Custom hooks (useZeptPay, useMerchantOnboarding)
 - Event emitter system
 - Centralized error handling
 - Secure token storage
@@ -965,7 +965,7 @@ export const MerchantScreen = () => {
 - Date picker
 
 ### ✅ v0.0.2
-- AirXPayProvider context
+- ZeptPayProvider context
 - Token service
 - Event system
 
@@ -1003,7 +1003,7 @@ import type {
   BankDetails,
   AppError,
   StepCompletion 
-} from '@flixora/airxpay-react-native';
+} from '@flixora/zeptpay-react-native';
 
 // Use types in your code
 const merchant: Merchant = {
@@ -1018,7 +1018,7 @@ const merchant: Merchant = {
 ### Common Issues
 
 1. **"Public key is required"**
-   - Make sure to wrap your app with `AirXPayProvider` and provide a valid public key
+   - Make sure to wrap your app with `ZeptPayProvider` and provide a valid public key
 
 2. **File upload fails**
    - Check permissions in `app.json`:
@@ -1038,14 +1038,14 @@ const merchant: Merchant = {
    ```
 
 3. **TypeScript errors**
-   - Update to latest version: `npm install @flixora/airxpay-react-native@latest`
+   - Update to latest version: `npm install @flixora/zeptpay-react-native@latest`
    - Check `tsconfig.json` includes `"skipLibCheck": true`
 
 ## 🤝 Contributing
 
 Found a bug? Have a feature request? 
-- 📝 [Open an issue](https://github.com/tafseelkhan/airxpay-sdk-init-ui/issues)
-- 🛠️ [Submit a PR](https://github.com/tafseelkhan/airxpay-sdk-init-ui/pulls)
+- 📝 [Open an issue](https://github.com/tafseelkhan/zeptpay-sdk-init-ui/issues)
+- 🛠️ [Submit a PR](https://github.com/tafseelkhan/zeptpay-sdk-init-ui/pulls)
 
 ## 📄 License
 
@@ -1055,7 +1055,7 @@ MIT © Flixora
 
 - 📧 Email: support@flixora.com
 - 📚 Docs: [docs.flixora.com/react-native](https://docs.flixora.com/react-native)
-- 🐛 Issues: [GitHub Issues](https://github.com/tafseelkhan/airxpay-sdk-init-ui/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/tafseelkhan/zeptpay-sdk-init-ui/issues)
 - 💬 Discord: [Flixora Community](https://discord.gg/flixora)
 
 ---

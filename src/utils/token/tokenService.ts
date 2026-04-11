@@ -5,7 +5,7 @@ const TOKEN_KEY = 'merchantToken';
 // NEVER log the token
 const log = (message: string) => {
   if (__DEV__) {
-    console.log(`[AirXPay Token] ${message}`);
+    console.log(`[ZeptPay Token] ${message}`);
   }
 };
 

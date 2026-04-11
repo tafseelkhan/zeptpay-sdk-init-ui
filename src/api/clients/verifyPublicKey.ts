@@ -24,7 +24,7 @@ export const verifyPublicKey = async (publicKey: string): Promise<{ valid: boole
 
     return data;
   } catch (error) {
-    console.error('[AirXPay] Public key verification failed');
+    console.error('[ZeptPay] Public key verification failed');
     throw error;
   }
 };

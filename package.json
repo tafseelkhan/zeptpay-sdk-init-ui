@@ -1,7 +1,7 @@
 {
-  "name": "@flixora/airxpay-react-native",
-  "version": "0.0.5",
-  "description": "AirXPay Initialization UI Components for React & React Native",
+  "name": "@flixora/zeptpay-react-native",
+  "version": "0.0.6",
+  "description": "ZeptPay Initialization UI Components for React & React Native",
   "author": "Tafseel Khan",
   "license": "MIT",
   "types": "dist/index.d.ts",
@@ -24,38 +24,40 @@
   "devDependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/datetimepicker": "^8.6.0",
+    "@react-native-documents/picker": "^12.0.1",
     "@react-navigation/native": "^7.1.28",
+    "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
+    "@types/react-native-vector-icons": "^6.4.18",
     "axios": "^1.13.5",
     "copyfiles": "^2.4.1",
     "cpx": "^1.5.0",
     "crypto": "^1.0.1",
-    "expo-crypto": "^15.0.8",
-    "expo-document-picker": "^55.0.8",
-    "expo-file-system": "^55.0.10",
-    "expo-image-picker": "^17.0.10",
-    "expo-linear-gradient": "^15.0.8",
-    "expo-module-scripts": "^5.0.8",
-    "expo-secure-store": "^15.0.8",
     "react": "^19.2.4",
     "react-native": "^0.84.0",
     "react-native-country-picker-modal": "^2.0.0",
+    "react-native-fs": "^2.20.0",
+    "react-native-get-random-values": "^2.0.0",
+    "react-native-image-picker": "^8.2.1",
+    "react-native-keychain": "^10.0.0",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-paper": "^5.15.0",
+    "react-native-vector-icons": "^10.3.0",
     "typescript": "^5.9.3"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tafseelkhan/airxpay-sdk-init-ui.git"
+    "url": "git+https://github.com/tafseelkhan/zeptpay-sdk-init-ui.git"
   },
   "keywords": [
-    "airxpay",
+    "zeptpay",
     "react-native",
     "seller-onboarding",
     "payments",
     "ui"
   ],
   "bugs": {
-    "url": "https://github.com/tafseelkhan/airxpay-sdk-init-ui/issues"
+    "url": "https://github.com/tafseelkhan/zeptpay-sdk-init-ui/issues"
   },
-  "homepage": "https://github.com/tafseelkhan/airxpay-sdk-init-ui#readme"
+  "homepage": "https://github.com/tafseelkhan/zeptpay-sdk-init-ui#readme"
 }

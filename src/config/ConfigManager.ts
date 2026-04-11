@@ -15,7 +15,7 @@ export class ConfigManager {
   private constructor() {
     this.logger = new Logger({
       enabled: true,
-      prefix: '[AirXPay SDK]'
+      prefix: '[ZeptPay SDK]'
     });
   }
 
@@ -38,7 +38,7 @@ export class ConfigManager {
 
     this.logger.setEnabled(this.config.enableLogging || false);
     
-    this.log('🚀 AirXPay SDK initialized:');
+    this.log('🚀 ZeptPay SDK initialized:');
     this.log('  📌 Public key:', config.publicKey.substring(0, 8) + '...');
   }
 

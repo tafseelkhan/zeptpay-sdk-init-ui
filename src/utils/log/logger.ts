@@ -9,7 +9,7 @@ export class Logger {
 
   constructor(options: LoggerOptions = {}) {
     this.enabled = options.enabled ?? __DEV__;
-    this.prefix = options.prefix || '[AirXPay]';
+    this.prefix = options.prefix || '[ZeptPay]';
   }
 
   setEnabled(enabled: boolean) {

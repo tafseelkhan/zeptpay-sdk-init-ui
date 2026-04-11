@@ -6,7 +6,7 @@ export const API_ENDPOINTS = {
 } as const;
 
 export const ERROR_MESSAGES = {
-  INITIALIZATION_FAILED: 'Failed to initialize AirXPay SDK',
+  INITIALIZATION_FAILED: 'Failed to initialize ZeptPay SDK',
   CREATE_MERCHANT_FAILED: 'Failed to create merchant account',
   FETCH_STATUS_FAILED: 'Failed to fetch merchant status',
   TOKEN_REFRESH_FAILED: 'Failed to refresh authentication token',
@@ -17,7 +17,7 @@ export const ERROR_MESSAGES = {
 
 export const UI_TEXTS = {
   ONBOARDING_COMPLETE: {
-    TITLE: 'Welcome to AirXPay! 🎉',
+    TITLE: 'Welcome to ZeptPay! 🎉',
     SUBTITLE: 'Your merchant account has been successfully created',
     FOOTER: 'You can now start accepting payments'
   },
@@ -30,8 +30,8 @@ export const UI_TEXTS = {
 } as const;
 
 export const STORAGE_KEYS = {
-  MERCHANT_TOKEN: '@airxpay_merchant_token',
-  MERCHANT_DATA: '@airxpay_merchant_data'
+  MERCHANT_TOKEN: '@zeptpay_merchant_token',
+  MERCHANT_DATA: '@zeptpay_merchant_data'
 } as const;
 
 export const API_TIMEOUTS = {

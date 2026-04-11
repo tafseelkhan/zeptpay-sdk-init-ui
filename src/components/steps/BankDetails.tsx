@@ -11,13 +11,13 @@ import {
   Platform,
 } from "react-native";
 import {
-  TextInput,
+  TextInput as PaperTextInput,
   HelperText,
   Surface,
   IconButton,
   ActivityIndicator,
 } from "react-native-paper";
-import { LinearGradient } from "expo-linear-gradient";
+import LinearGradient from "react-native-linear-gradient";
 import FileUploader from "../common/FileUploader";
 import {
   Merchant,
@@ -74,7 +74,6 @@ const BankDetails: React.FC<BankDetailsProps> = ({
       const { accountHolderName, bankName, accountNumber, ifscCode } =
         initialData.bankDetails;
       if (accountHolderName && bankName && accountNumber && ifscCode) {
-        // Form is pre-filled with existing data
         setFormValid(true);
       }
     }
@@ -90,9 +89,6 @@ const BankDetails: React.FC<BankDetailsProps> = ({
     ifscCode: string,
   ): boolean => {
     // Basic validation - bank code from IFSC should match account number pattern
-    // This is a simplified check - in production, you might want to use a bank validation API
-    const bankCode = ifscCode.substring(0, 4);
-    // Add bank-specific validation if needed
     return true;
   };
 
@@ -152,16 +148,12 @@ const BankDetails: React.FC<BankDetailsProps> = ({
       "ifscCode",
     ];
 
-    // Check if all required fields have values
     const allRequiredFilled = requiredFields.every((field) => {
       const value = formData[field];
       return value && value.toString().trim().length > 0;
     });
 
-    // Check if there are any errors
     const hasNoErrors = Object.keys(errors).length === 0;
-
-    // Check if cheque is uploaded
     const hasCheque = cancelledCheque !== undefined && cancelledCheque !== "";
 
     const isValid = allRequiredFilled && hasNoErrors && hasCheque;
@@ -179,7 +171,6 @@ const BankDetails: React.FC<BankDetailsProps> = ({
 
     setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Validate on change
     const error = validateField(field, value);
     setErrors((prev) => {
       const newErrors = { ...prev };
@@ -207,10 +198,8 @@ const BankDetails: React.FC<BankDetailsProps> = ({
     });
   };
 
-  // ✅ FIXED: Handle cheque upload - receives base64 string directly
   const handleChequeUpload = async (base64String: string) => {
     setUploading(true);
-    // ✅ Directly store the base64 string
     setCancelledCheque(base64String);
     setUploading(false);
   };
@@ -231,7 +220,6 @@ const BankDetails: React.FC<BankDetailsProps> = ({
   };
 
   const handleSubmit = () => {
-    // Final validation before submit
     const requiredFields: BankDetailsFormFields[] = [
       "accountHolderName",
       "bankName",
@@ -255,7 +243,6 @@ const BankDetails: React.FC<BankDetailsProps> = ({
       return;
     }
 
-    // Validate bank account combination
     if (formData.accountNumber && formData.ifscCode) {
       if (!validateBankAccount(formData.accountNumber, formData.ifscCode)) {
         Alert.alert("Error", "Account number and IFSC code do not match");
@@ -263,10 +250,8 @@ const BankDetails: React.FC<BankDetailsProps> = ({
       }
     }
 
-    // Show submitting state
     setIsSubmitting(true);
 
-    // Simulate submission
     setTimeout(() => {
       setIsSubmitting(false);
       onNext({
@@ -353,7 +338,7 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                 <Text style={styles.label}>
                   Account Holder Name <Text style={styles.requiredStar}>*</Text>
                 </Text>
-                <TextInput
+                <PaperTextInput
                   mode="outlined"
                   value={formData.accountHolderName}
                   onChangeText={(text) =>
@@ -365,7 +350,11 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                   outlineColor="#E5E7EB"
                   activeOutlineColor="#0066CC"
                   left={
-                    <TextInput.Icon icon="account" color="#6B7280" size={20} />
+                    <PaperTextInput.Icon
+                      icon="account"
+                      color="#6B7280"
+                      size={20}
+                    />
                   }
                   placeholder="John Doe"
                   placeholderTextColor="#9CA3AF"
@@ -382,7 +371,7 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                 <Text style={styles.label}>
                   Bank Name <Text style={styles.requiredStar}>*</Text>
                 </Text>
-                <TextInput
+                <PaperTextInput
                   mode="outlined"
                   value={formData.bankName}
                   onChangeText={(text) => handleChange("bankName", text)}
@@ -392,7 +381,11 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                   outlineColor="#E5E7EB"
                   activeOutlineColor="#0066CC"
                   left={
-                    <TextInput.Icon icon="bank" color="#6B7280" size={20} />
+                    <PaperTextInput.Icon
+                      icon="bank"
+                      color="#6B7280"
+                      size={20}
+                    />
                   }
                   placeholder="State Bank of India"
                   placeholderTextColor="#9CA3AF"
@@ -410,7 +403,7 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                   Account Number <Text style={styles.requiredStar}>*</Text>
                 </Text>
                 <View>
-                  <TextInput
+                  <PaperTextInput
                     mode="outlined"
                     value={formData.accountNumber}
                     onChangeText={(text) => handleChange("accountNumber", text)}
@@ -421,14 +414,14 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                     outlineColor="#E5E7EB"
                     activeOutlineColor="#0066CC"
                     left={
-                      <TextInput.Icon
+                      <PaperTextInput.Icon
                         icon="credit-card"
                         color="#6B7280"
                         size={20}
                       />
                     }
                     right={
-                      <TextInput.Icon
+                      <PaperTextInput.Icon
                         icon={showAccountNumber ? "eye-off" : "eye"}
                         onPress={() => setShowAccountNumber(!showAccountNumber)}
                         color="#6B7280"
@@ -461,7 +454,7 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                 <Text style={styles.label}>
                   IFSC Code <Text style={styles.requiredStar}>*</Text>
                 </Text>
-                <TextInput
+                <PaperTextInput
                   mode="outlined"
                   value={formData.ifscCode}
                   onChangeText={(text) => handleChange("ifscCode", text)}
@@ -472,7 +465,11 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                   outlineColor="#E5E7EB"
                   activeOutlineColor="#0066CC"
                   left={
-                    <TextInput.Icon icon="qrcode" color="#6B7280" size={20} />
+                    <PaperTextInput.Icon
+                      icon="qrcode"
+                      color="#6B7280"
+                      size={20}
+                    />
                   }
                   placeholder="SBIN0123456"
                   placeholderTextColor="#9CA3AF"
@@ -500,7 +497,7 @@ const BankDetails: React.FC<BankDetailsProps> = ({
               {/* UPI ID */}
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>UPI ID (Optional)</Text>
-                <TextInput
+                <PaperTextInput
                   mode="outlined"
                   value={formData.upiId}
                   onChangeText={(text) => handleChange("upiId", text)}
@@ -510,7 +507,7 @@ const BankDetails: React.FC<BankDetailsProps> = ({
                   outlineColor="#E5E7EB"
                   activeOutlineColor="#0066CC"
                   left={
-                    <TextInput.Icon
+                    <PaperTextInput.Icon
                       icon="cellphone"
                       color="#6B7280"
                       size={20}

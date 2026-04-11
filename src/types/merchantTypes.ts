@@ -103,7 +103,7 @@ export interface StepCompletion {
   final: boolean;
 }
 
-export interface AirXPayConfig {
+export interface ZeptPayConfig {
   publicKey: string;
 }
 

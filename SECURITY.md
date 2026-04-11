@@ -1,8 +1,8 @@
-# AirXPay Initialization UI – Security Policy
+# ZeptPay Initialization UI – Security Policy
 
 ## 🛡 Overview
 
-AirXPay Initialization UI provides React & React Native components for seller onboarding. Security is focused on protecting API keys, sensitive seller data, and safe frontend usage.
+ZeptPay Initialization UI provides React & React Native components for seller onboarding. Security is focused on protecting API keys, sensitive seller data, and safe frontend usage.
 
 ---
 
@@ -19,7 +19,7 @@ AirXPay Initialization UI provides React & React Native components for seller on
 
 3. **Network Security**
    - Always use HTTPS endpoints for API calls.
-   - Avoid hardcoded endpoints; configure via `<AirXPayProvider>`.
+   - Avoid hardcoded endpoints; configure via `<ZeptPayProvider>`.
 
 4. **Dependency Security**
    - Keep React, React Native, and related libraries up-to-date.
@@ -53,7 +53,7 @@ Response guaranteed within **48 hours**.
 
 ## ⚠ Responsible Disclosure
 
-- AirXPay respects responsible disclosure.
+- ZeptPay respects responsible disclosure.
 - Reported security issues are fixed promptly.
 - Reporters may be credited publicly if they wish.
 

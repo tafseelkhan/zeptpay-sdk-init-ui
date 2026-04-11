@@ -7,10 +7,15 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Platform,
+  ActivityIndicator,
 } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
-import * as ImagePicker from "expo-image-picker";
-import { MaterialIcons } from "@expo/vector-icons";
+import {
+  launchImageLibrary,
+  launchCamera,
+  Asset,
+} from "react-native-image-picker";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { Mode } from "../../types/merchantTypes";
 import {
   convertFileToBase64,
@@ -47,7 +52,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   /**
    * Process selected asset - convert to base64 and validate
    */
-  const processAsset = async (asset: ImagePicker.ImagePickerAsset) => {
+  const processAsset = async (asset: Asset) => {
     try {
       setIsProcessing(true);
 
@@ -64,7 +69,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       // Step 2: Convert to base64
       try {
         const base64Data = await convertFileToBase64({
-          uri: asset.uri,
+          uri: asset.uri || "",
           type: mimeType,
         });
 
@@ -76,7 +81,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         console.log(`✅ File converted successfully`);
 
         // Step 4: Emit base64 DIRECTLY to parent
-        onUpload(base64Data); // ✅ Parent receives base64 string, not object
+        onUpload(base64Data);
       } catch (error: any) {
         console.error("Conversion error:", error);
         Alert.alert(
@@ -92,29 +97,87 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     }
   };
 
+  // ✅ Request gallery permissions (Android 13+ needs READ_MEDIA_IMAGES)
+  const requestGalleryPermission = async (): Promise<boolean> => {
+    if (Platform.OS === "android") {
+      try {
+        const PermissionsAndroid = require("react-native").PermissionsAndroid;
+        // Android 13+ (API 33+) uses READ_MEDIA_IMAGES
+        const permission =
+          Platform.Version >= 33
+            ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+            : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+
+        const granted = await PermissionsAndroid.request(permission, {
+          title: "Gallery Permission",
+          message: "App needs access to your gallery to select images",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        });
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.error("Gallery permission error:", err);
+        return false;
+      }
+    }
+    return true; // iOS permissions are handled by react-native-image-picker
+  };
+
+  // ✅ Request camera permission
+  const requestCameraPermission = async (): Promise<boolean> => {
+    if (Platform.OS === "android") {
+      try {
+        const PermissionsAndroid = require("react-native").PermissionsAndroid;
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: "Camera Permission",
+            message: "App needs access to your camera to take photos",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK",
+          },
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.error("Camera permission error:", err);
+        return false;
+      }
+    }
+    return true;
+  };
+
   // ✅ Pick image from gallery
   const pickImage = async () => {
     try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
+      const hasPermission = await requestGalleryPermission();
+      if (!hasPermission) {
         Alert.alert(
           "Permission needed",
-          "Please grant camera roll permissions to select images",
+          "Please grant gallery permissions to select images",
         );
         return;
       }
 
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: "images",
-        allowsEditing: true,
-        aspect: [4, 3],
+      const result = await launchImageLibrary({
+        mediaType: "photo",
         quality: 0.8,
-        base64: false,
-        allowsMultipleSelection: false,
+        includeBase64: false,
+        selectionLimit: 1,
       });
 
-      if (!result.canceled && result.assets && result.assets.length > 0) {
+      if (result.didCancel) {
+        return;
+      }
+
+      if (result.errorCode) {
+        console.error("ImagePicker Error:", result.errorMessage);
+        Alert.alert("Error", result.errorMessage || "Failed to pick image");
+        return;
+      }
+
+      if (result.assets && result.assets.length > 0) {
         await processAsset(result.assets[0]);
       }
     } catch (error) {
@@ -126,8 +189,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   // ✅ Take photo with camera
   const takePhoto = async () => {
     try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== "granted") {
+      const hasPermission = await requestCameraPermission();
+      if (!hasPermission) {
         Alert.alert(
           "Permission needed",
           "Please grant camera permissions to take photos",
@@ -135,14 +198,24 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         return;
       }
 
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
+      const result = await launchCamera({
+        mediaType: "photo",
         quality: 0.8,
-        base64: false,
+        includeBase64: false,
+        saveToPhotos: true,
       });
 
-      if (!result.canceled && result.assets && result.assets.length > 0) {
+      if (result.didCancel) {
+        return;
+      }
+
+      if (result.errorCode) {
+        console.error("Camera Error:", result.errorMessage);
+        Alert.alert("Error", result.errorMessage || "Failed to take photo");
+        return;
+      }
+
+      if (result.assets && result.assets.length > 0) {
         await processAsset(result.assets[0]);
       }
     } catch (error) {
@@ -223,7 +296,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
             </View>
           ) : (
             <>
-              <MaterialIcons name="cloud-upload" size={32} color="#6B7280" />
+              <Icon name="cloud-upload" size={32} color="#6B7280" />
               <Text style={styles.uploadText}>Tap to upload</Text>
               <Text style={styles.uploadHint}>
                 {allowedTypes
@@ -242,7 +315,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   );
 };
 
-// Styles remain exactly the same
+// Styles
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,

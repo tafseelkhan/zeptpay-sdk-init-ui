@@ -9,11 +9,11 @@ export { storage } from './utils/token/storage';
 export { sdkEvents } from './events/sdkEvents';
 
 // Context
-export { AirXPayProvider, useAirXPay, useAirXPaySafe } from './contexts/AirXPayProvider';
+export { ZeptPayProvider, useZeptPay, useZeptPaySafe } from './contexts/ZeptPayProvider';
 
 // Hooks
 export { useMerchantOnboarding } from './hooks/useMerchantOnboarding';
-export { useAirXPay as useAirXPayHook } from './hooks/useAirXPay';
+export { useZeptPay as useZeptPayHook } from './hooks/useZeptPay';
 
 // Components
 export { default as MerchantOnboarding } from './components/steps/onboarding/MerchantOnboarding';
