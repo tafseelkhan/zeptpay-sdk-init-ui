@@ -24,6 +24,7 @@ interface MerchantData {
   status: string;
   kycStatus: string;
   dob: string;
+  vendorCodeUID: string;
   merchantDID: string;
   walletId: string;
   merchantName: string;
@@ -1000,6 +1001,45 @@ export const OnboardingCompleteScreen: React.FC<
                     ]}
                   >
                     {formatWalletId(developerData.merchantDID)}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      /* Copy to clipboard */
+                    }}
+                  >
+                    <IconButton
+                      icon="content-copy"
+                      size={16}
+                      iconColor={customTheme.primaryColor}
+                      style={styles.copyIcon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* vendorCodeUID */}
+              <View style={styles.walletRow}>
+                <Text
+                  style={[
+                    styles.walletLabel,
+                    { color: customTheme.textColor + "80" },
+                  ]}
+                >
+                  Vendor Code UID
+                </Text>
+                <View
+                  style={[
+                    styles.walletValueContainer,
+                    { backgroundColor: customTheme.cardColor },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.walletValue,
+                      { color: customTheme.textColor },
+                    ]}
+                  >
+                    {formatWalletId(developerData.vendorCodeUID)}
                   </Text>
                   <TouchableOpacity
                     onPress={() => {
